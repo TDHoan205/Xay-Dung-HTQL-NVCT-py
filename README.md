@@ -1,0 +1,2 @@
+# Xay-Dung-HTQL-NVCT-py
+XÂY DỰNG HỆ THỐNG QUẢN LÝ NHÂN VIÊN CÔNG TY DÙNG NGÔN NGỮ PYTHON
