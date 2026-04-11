@@ -123,8 +123,8 @@ Các phương thức hiển thị thông tin được chuẩn hóa, đảm bảo
 
 Nếu bạn có bất kỳ câu hỏi hoặc đề xuất cải tiến, vui lòng liên hệ:
 
-- Email: tdhoan@example.com
-- GitHub: github.com/tdhoan
+- Email: hoanhb250320050@gmail.com
+- GitHub: github.com/TDHoan205
 
 ---
 
