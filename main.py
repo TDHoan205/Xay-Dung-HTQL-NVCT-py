@@ -1,44 +1,25 @@
 # =============================================================================
-# ██╗      HỆ THỐNG QUẢN LÝ NHÂN VIÊN CÔNG TY ABC
+# ██╗      HE THONG QUAN LY NHAN VIEN CONG TY ABC
 # ██║      EMPLOYEE MANAGEMENT SYSTEM
 # ██║      ─────────────────────────────────────────
-# ██║      File: main.py - Chương trình chính (Entry Point)
-# ██║      Phiên bản: 1.0
-# ╚═╝      
-# =============================================================================
-# GIẢI THÍCH CHO NGƯỜI MỚI:
+# ██║      File: main.py - Chuong trinh chinh (Entry Point)
+# ██║      Phien ban: 2.0 (Console Mode)
+# ╚═╝
 #
-# Đây là file chạy chính của chương trình. Khi chạy: python main.py
-#
-# LUỒNG HOẠT ĐỘNG (Flow):
-#   1. Khởi tạo Company object
-#   2. Thêm dữ liệu mẫu (để test nhanh)
-#   3. Hiển thị menu chính → Nhận lựa chọn → Xử lý → Lặp lại
-#   4. Khi chọn "Thoát" → Kết thúc chương trình
-#
-# CẤU TRÚC FILE NÀY:
-#   - Các hàm hiển thị menu (print_main_menu, print_sub_menu_xxx)
-#   - Các hàm xử lý từng chức năng (handle_xxx)
-#   - Hàm tạo dữ liệu mẫu (create_sample_data)
-#   - Hàm main() - Điều phối chính
-#   - if __name__ == "__main__": → Điểm bắt đầu chương trình
-#
-# SỬ DỤNG SYS.PATH:
-#   - sys.path.insert(0, ...) thêm thư mục gốc vào đường dẫn import
-#   - Giúp Python tìm được các package: models, services, utils, exceptions
+# HUONG DAN:
+#   - Chay binh thuong: python main.py
+#   - Chay voi du lieu mau: python main.py
+#     (chuong trinh se hoi ban co muon tai du lieu mau khong)
 # =============================================================================
 
 import sys
 import os
 
-# ── Thêm thư mục hiện tại vào sys.path để import các package ────────────────
-# os.path.dirname(__file__) lấy thư mục chứa file main.py
-# os.path.abspath() chuyển thành đường dẫn tuyệt đối
-# sys.path.insert(0, ...) thêm vào đầu danh sách tìm kiếm module
+# ── Them thu muc hien tai vao sys.path ────────────────────────────────────────
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, BASE_DIR)
 
-# ── Import các module cần thiết ─────────────────────────────────────────────
+# ── Import cac module can thiet ───────────────────────────────────────────────
 from models import Manager, Developer, Intern
 from models.employee import Employee
 from services.company import Company
@@ -60,76 +41,72 @@ from exceptions import (
 
 
 # =============================================================================
-# PHẦN 1: CÁC HÀM HIỂN THỊ MENU
+# PHAN 1: MENU CHINH
 # =============================================================================
 
 def print_main_menu():
-    """Hiển thị menu chính của chương trình."""
-    Formatter.print_header("HỆ THỐNG QUẢN LÝ NHÂN VIÊN CÔNG TY ABC")
+    """Hien thi menu chinh cua chuong trinh."""
+    Formatter.print_header("HE THONG QUAN LY NHAN VIEN CONG TY ABC")
     print("""
-  1. Thêm nhân viên mới
-     a. Thêm Manager
-     b. Thêm Developer
-     c. Thêm Intern
+  1. Them nhan vien moi
+     a. Them Manager
+     b. Them Developer
+     c. Them Intern
 
-  2. Hiển thị danh sách nhân viên
-     a. Tất cả nhân viên
-     b. Theo loại (Manager/Developer/Intern)
-     c. Theo hiệu suất (từ cao đến thấp)
+  2. Hien thi danh sach nhan vien
+     a. Tat ca nhan vien
+     b. Theo loai (Manager/Developer/Intern)
+     c. Theo hieu suat (tu cao den thap)
 
-  3. Tìm kiếm nhân viên
+  3. Tim kiem nhan vien
      a. Theo ID
-     b. Theo tên
-     c. Theo ngôn ngữ lập trình (cho Developer)
+     b. Theo ten
+     c. Theo ngon ngu lap trinh (cho Developer)
 
-  4. Quản lý lương
-     a. Tính lương cho từng nhân viên
-     b. Tính tổng lương công ty
-     c. Top 3 nhân viên lương cao nhất
+  4. Quan ly luong
+     a. Tinh luong cho tung nhan vien
+     b. Tinh tong luong cong ty
+     c. Top 3 nhan vien luong cao nhat
 
-  5. Quản lý dự án
-     a. Phân công nhân viên vào dự án
-     b. Xóa nhân viên khỏi dự án
-     c. Hiển thị dự án của 1 nhân viên
+  5. Quan ly du an
+     a. Phan cong nhan vien vao du an
+     b. Xoa nhan vien khoi du an
+     c. Hien thi du an cua 1 nhan vien
 
-  6. Đánh giá hiệu suất
-     a. Cập nhật điểm hiệu suất cho nhân viên
-     b. Hiển thị nhân viên xuất sắc (điểm > 8)
-     c. Hiển thị nhân viên cần cải thiện (điểm < 5)
+  6. Danh gia hieu suat
+     a. Cap nhat diem hieu suat cho nhan vien
+     b. Hien thi nhan vien xuat sac (diem > 8)
+     c. Hien thi nhan vien can cai thien (diem < 5)
 
-  7. Quản lý nhân sự
-     a. Xóa nhân viên (nghỉ việc)
-     b. Tăng lương cơ bản cho nhân viên
-     c. Thăng chức (Intern → Developer, Developer → Manager)
+  7. Quan ly nhan su
+     a. Xoa nhan vien (nghi viec)
+     b. Tang luong co ban cho nhan vien
+     c. Thang chuc (Intern → Developer, Developer → Manager)
 
-  8. Thống kê báo cáo
-     a. Số lượng nhân viên theo loại
-     b. Tổng lương theo phòng ban
-     c. Số dự án trung bình trên mỗi nhân viên
+  8. Thong ke bao cao
+     a. So luong nhan vien theo loai
+     b. Tong luong theo phong ban
+     c. So du an trung binh tren moi nhan vien
 
-  9. Thoát""")
+  9. Thoat""")
     print(Formatter.BORDER_CHAR * Formatter.LINE_WIDTH)
 
 
 # =============================================================================
-# PHẦN 2: CÁC HÀM NHẬP DỮ LIỆU (có xử lý lỗi)
+# PHAN 2: CAC HAM NHAP DU LIEU (co xu ly loi)
 # =============================================================================
 
 def input_with_retry(prompt, validator_func, max_retries=3):
     """
-    Nhập dữ liệu với validate và cho phép nhập lại khi sai.
-    
-    GIẢI THÍCH:
-      - Hàm này wrap quá trình: nhập → validate → trả kết quả
-      - Nếu validate lỗi → thông báo lỗi → cho nhập lại (tối đa max_retries lần)
+    Nhap du lieu voi validate va cho phep nhap lai khi sai.
     
     Args:
-        prompt (str): Câu hỏi hiển thị cho người dùng
-        validator_func (callable): Hàm validate (VD: Validator.validate_age)
-        max_retries (int): Số lần cho phép nhập lại (mặc định: 3)
+        prompt (str): Cau hoi hien thi cho nguoi dung
+        validator_func (callable): Ham validate (VD: Validator.validate_age)
+        max_retries (int): So lan cho phep nhap lai (mac dinh: 3)
         
     Returns:
-        Giá trị đã validate thành công, hoặc None nếu hết lần thử
+        Gia tri da validate thanh cong, hoac None neu het lan thu
     """
     for attempt in range(max_retries):
         try:
@@ -139,36 +116,36 @@ def input_with_retry(prompt, validator_func, max_retries=3):
             remaining = max_retries - attempt - 1
             Formatter.print_error(str(e))
             if remaining > 0:
-                print(f"  (Còn {remaining} lần thử)")
+                print(f"  (Con {remaining} lan thu)")
             else:
-                Formatter.print_error("Đã hết số lần thử. Quay lại menu.")
+                Formatter.print_error("Da het so lan thu. Quay lai menu.")
                 return None
     return None
 
 
 def input_common_employee_info():
     """
-    Nhập thông tin chung cho tất cả loại nhân viên.
+    Nhap thong tin chung cho tat ca loai nhan vien.
     
     Returns:
-        dict: Dictionary chứa thông tin đã validate, hoặc None nếu có lỗi
+        dict: Dictionary chua thong tin da validate, hoac None neu co loi
         
     Flow:
-        Nhập lần lượt: ID → Tên → Tuổi → Email → SĐT → Phòng ban → Lương cơ bản
-        Mỗi bước đều có validate, cho nhập lại nếu sai
+        Nhap lan luot: ID → Ten → Tuoi → Email → SDT → Phong ban → Luong co ban
+        Moi buoc deu co validate, cho nhap lai neu sai
     """
-    Formatter.print_sub_header("NHẬP THÔNG TIN NHÂN VIÊN")
+    Formatter.print_sub_header("NHAP THONG TIN NHAN VIEN")
     
-    # ── ID nhân viên ────────────────────────────────────────────────────
-    employee_id = input("  Mã nhân viên (để trống = tự sinh): ").strip().upper()
+    # ── ID nhan vien ────────────────────────────────────────────────────
+    employee_id = input("  Ma nhan vien (de trong = tu sinh): ").strip().upper()
     
-    # ── Họ tên ──────────────────────────────────────────────────────────
-    name = input_with_retry("Họ tên", Validator.validate_name)
+    # ── Ho ten ──────────────────────────────────────────────────────────
+    name = input_with_retry("Ho ten", Validator.validate_name)
     if name is None:
         return None
     
-    # ── Tuổi ────────────────────────────────────────────────────────────
-    age = input_with_retry("Tuổi (18-65)", Validator.validate_age)
+    # ── Tuoi ────────────────────────────────────────────────────────────
+    age = input_with_retry("Tuoi (18-65)", Validator.validate_age)
     if age is None:
         return None
     
@@ -177,18 +154,18 @@ def input_common_employee_info():
     if email is None:
         return None
     
-    # ── Số điện thoại ───────────────────────────────────────────────────
-    phone = input_with_retry("Số điện thoại", Validator.validate_phone)
+    # ── So dien thoai ───────────────────────────────────────────────────
+    phone = input_with_retry("So dien thoai", Validator.validate_phone)
     if phone is None:
         return None
     
-    # ── Phòng ban ───────────────────────────────────────────────────────
-    department = input_with_retry("Phòng ban", Validator.validate_department)
+    # ── Phong ban ───────────────────────────────────────────────────────
+    department = input_with_retry("Phong ban", Validator.validate_department)
     if department is None:
         return None
     
-    # ── Lương cơ bản ────────────────────────────────────────────────────
-    base_salary = input_with_retry("Lương cơ bản (VNĐ)", Validator.validate_salary)
+    # ── Luong co ban ───────────────────────────────────────────────────
+    base_salary = input_with_retry("Luong co ban (VND)", Validator.validate_salary)
     if base_salary is None:
         return None
     
@@ -204,63 +181,62 @@ def input_common_employee_info():
 
 
 # =============================================================================
-# PHẦN 3: CÁC HÀM XỬ LÝ CHỨC NĂNG CHÍNH
+# PHAN 3: CAC HAM XU LY CHUC NANG CHINH
 # =============================================================================
 
 # ─────────────────────────────────────────────────────────────────────────────
-# CHỨC NĂNG 1: THÊM NHÂN VIÊN MỚI
+# CHUC NANG 1: THEM NHAN VIEN MOI
 # ─────────────────────────────────────────────────────────────────────────────
 
 def handle_add_employee(company):
     """
-    Xử lý thêm nhân viên mới (Menu 1).
+    Xu ly them nhan vien moi (Menu 1).
     
     Sub-menu:
-        a. Thêm Manager
-        b. Thêm Developer
-        c. Thêm Intern
+        a. Them Manager
+        b. Them Developer
+        c. Them Intern
     """
-    Formatter.print_sub_header("THÊM NHÂN VIÊN MỚI")
-    print("  a. Thêm Manager")
-    print("  b. Thêm Developer")
-    print("  c. Thêm Intern")
-    print("  0. Quay lại")
+    Formatter.print_sub_header("THEM NHAN VIEN MOI")
+    print("  a. Them Manager")
+    print("  b. Them Developer")
+    print("  c. Them Intern")
+    print("  0. Quay lai")
     
-    choice = input("\n  Chọn loại nhân viên: ").strip().lower()
+    choice = input("\n  Chon loai nhan vien: ").strip().lower()
     
     if choice == '0':
         return
     
-    # ── Nhập thông tin chung ────────────────────────────────────────────
+    # ── Nhap thong tin chung ────────────────────────────────────────────
     info = input_common_employee_info()
     if info is None:
         return
     
     try:
         if choice == 'a':
-            # ── Thêm Manager ───────────────────────────────────────────
+            # ── Them Manager ───────────────────────────────────────────
             if not info['employee_id']:
                 info['employee_id'] = Employee.generate_id("MGR")
             
-            # Nhập thêm thông tin riêng của Manager
-            print("\n  --- Thông tin Manager ---")
+            print("\n  --- Thong tin Manager ---")
             
-            team_size_str = input("  Số nhân viên quản lý: ").strip()
+            team_size_str = input("  So nhan vien quan ly: ").strip()
             try:
                 team_size = int(team_size_str)
                 if team_size < 0:
                     raise ValueError()
             except ValueError:
-                Formatter.print_error("Số nhân viên phải là số nguyên >= 0. Đặt mặc định = 0")
+                Formatter.print_error("So nhan vien phai la so nguyen >= 0. Dat mac dinh = 0")
                 team_size = 0
             
-            bonus_str = input("  Phụ cấp quản lý (VNĐ): ").strip()
+            bonus_str = input("  Phu cap quan ly (VND): ").strip()
             try:
                 management_bonus = float(bonus_str)
                 if management_bonus < 0:
                     raise ValueError()
             except ValueError:
-                Formatter.print_error("Phụ cấp phải là số >= 0. Đặt mặc định = 0")
+                Formatter.print_error("Phu cap phai la so >= 0. Dat mac dinh = 0")
                 management_bonus = 0
             
             employee = Manager(
@@ -270,24 +246,24 @@ def handle_add_employee(company):
             )
             
         elif choice == 'b':
-            # ── Thêm Developer ─────────────────────────────────────────
+            # ── Them Developer ─────────────────────────────────────────
             if not info['employee_id']:
                 info['employee_id'] = Employee.generate_id("DEV")
             
-            print("\n  --- Thông tin Developer ---")
+            print("\n  --- Thong tin Developer ---")
             
-            language = input("  Ngôn ngữ lập trình chính: ").strip()
+            language = input("  Ngon ngu lap trinh chinh: ").strip()
             if not language:
                 language = "Python"
-                print("  → Mặc định: Python")
+                print("  → Mac dinh: Python")
             
-            ot_str = input("  Số giờ làm thêm/tháng: ").strip()
+            ot_str = input("  So gio lam them/thang: ").strip()
             try:
                 overtime = float(ot_str)
                 if overtime < 0:
                     raise ValueError()
             except ValueError:
-                Formatter.print_error("Giờ OT phải là số >= 0. Đặt mặc định = 0")
+                Formatter.print_error("Gio OT phai la so >= 0. Dat mac dinh = 0")
                 overtime = 0
             
             employee = Developer(
@@ -297,13 +273,13 @@ def handle_add_employee(company):
             )
             
         elif choice == 'c':
-            # ── Thêm Intern ────────────────────────────────────────────
+            # ── Them Intern ───────────────────────────────────────────
             if not info['employee_id']:
                 info['employee_id'] = Employee.generate_id("INT")
             
-            print("\n  --- Thông tin Intern ---")
+            print("\n  --- Thong tin Intern ---")
             
-            university = input("  Trường đại học: ").strip()
+            university = input("  Truong dai hoc: ").strip()
             
             gpa_str = input("  GPA (0.0 - 4.0): ").strip()
             try:
@@ -311,16 +287,16 @@ def handle_add_employee(company):
                 if gpa < 0 or gpa > 4.0:
                     raise ValueError()
             except ValueError:
-                Formatter.print_error("GPA phải từ 0.0-4.0. Đặt mặc định = 0.0")
+                Formatter.print_error("GPA phai tu 0.0-4.0. Dat mac dinh = 0.0")
                 gpa = 0.0
             
-            rate_str = input("  Tỷ lệ lương thực tập (0.0-1.0): ").strip()
+            rate_str = input("  Ty le luong thuc tap (0.0-1.0): ").strip()
             try:
                 stipend_rate = float(rate_str)
                 if stipend_rate < 0 or stipend_rate > 1.0:
                     raise ValueError()
             except ValueError:
-                Formatter.print_error("Tỷ lệ phải từ 0.0-1.0. Đặt mặc định = 0.5")
+                Formatter.print_error("Ty le phai tu 0.0-1.0. Dat mac dinh = 0.5")
                 stipend_rate = 0.5
             
             employee = Intern(
@@ -330,46 +306,46 @@ def handle_add_employee(company):
                 **info
             )
         else:
-            Formatter.print_error("Lựa chọn không hợp lệ")
+            Formatter.print_error("Lua chon khong hop le")
             return
         
-        # Thêm vào công ty (tự xử lý trùng ID)
+        # Them vao cong ty (tu xu ly trung ID)
         final_id = company.add_employee(employee)
         Formatter.print_success(
-            f"Đã thêm {employee.get_role()}: {employee.name} "
+            f"Da them {employee.get_role()}: {employee.name} "
             f"[ID: {final_id}]"
         )
         
     except (InvalidAgeError, InvalidSalaryError, ValueError) as e:
         Formatter.print_error(str(e))
     except Exception as e:
-        Formatter.print_error(f"Lỗi không mong đợi: {e}")
+        Formatter.print_error(f"Loi khong mong doi: {e}")
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# CHỨC NĂNG 2: HIỂN THỊ DANH SÁCH NHÂN VIÊN
+# CHUC NANG 2: HIEN THI DANH SACH NHAN VIEN
 # ─────────────────────────────────────────────────────────────────────────────
 
 def handle_display_employees(company):
     """
-    Xử lý hiển thị danh sách nhân viên (Menu 2).
+    Xu ly hien thi danh sach nhan vien (Menu 2).
     
     Sub-menu:
-        a. Tất cả nhân viên
-        b. Theo loại (Manager/Developer/Intern)
-        c. Theo hiệu suất (từ cao đến thấp)
+        a. Tat ca nhan vien
+        b. Theo loai (Manager/Developer/Intern)
+        c. Theo hieu suat (tu cao den thap)
     """
     if not company.has_employees():
-        Formatter.print_warning("Chưa có dữ liệu nhân viên trong hệ thống")
+        Formatter.print_warning("Chua co du lieu nhan vien trong he thong")
         return
     
-    Formatter.print_sub_header("HIỂN THỊ DANH SÁCH NHÂN VIÊN")
-    print("  a. Tất cả nhân viên")
-    print("  b. Theo loại (Manager/Developer/Intern)")
-    print("  c. Theo hiệu suất (từ cao đến thấp)")
-    print("  0. Quay lại")
+    Formatter.print_sub_header("HIEN THI DANH SACH NHAN VIEN")
+    print("  a. Tat ca nhan vien")
+    print("  b. Theo loai (Manager/Developer/Intern)")
+    print("  c. Theo hieu suat (tu cao den thap)")
+    print("  0. Quay lai")
     
-    choice = input("\n  Chọn chức năng: ").strip().lower()
+    choice = input("\n  Chon chuc nang: ").strip().lower()
     
     if choice == '0':
         return
@@ -379,31 +355,31 @@ def handle_display_employees(company):
     
     if choice == 'a':
         employees = company.all_employees
-        title = "TẤT CẢ NHÂN VIÊN"
+        title = "TAT CA NHAN VIEN"
         
     elif choice == 'b':
-        print("\n  Chọn loại: 1-Manager  2-Developer  3-Intern")
-        role_choice = input("  Nhập lựa chọn: ").strip()
+        print("\n  Chon loai: 1-Manager  2-Developer  3-Intern")
+        role_choice = input("  Nhap lua chon: ").strip()
         
         role_map = {'1': 'manager', '2': 'developer', '3': 'intern'}
         if role_choice not in role_map:
-            Formatter.print_error("Lựa chọn không hợp lệ")
+            Formatter.print_error("Lua chon khong hop le")
             return
         
         role = role_map[role_choice]
         employees = company.filter_by_role(role)
-        title = f"DANH SÁCH {role.upper()}"
+        title = f"DANH SACH {role.upper()}"
         
     elif choice == 'c':
         employees = company.sort_by_performance(descending=True)
-        title = "NHÂN VIÊN THEO HIỆU SUẤT (CAO → THẤP)"
+        title = "NHAN VIEN THEO HIEU SUAT (CAO → THAP)"
     else:
-        Formatter.print_error("Lựa chọn không hợp lệ")
+        Formatter.print_error("Lua chon khong hop le")
         return
     
-    # Hiển thị kết quả
+    # Hien thi ket qua
     if not employees:
-        Formatter.print_warning("Không tìm thấy nhân viên nào")
+        Formatter.print_warning("Khong tim thay nhan vien nao")
         return
     
     Formatter.print_header(title)
@@ -413,123 +389,123 @@ def handle_display_employees(company):
         print(Formatter.format_employee_row(i, emp))
     
     Formatter.print_separator()
-    print(f"\n  Tổng: {len(employees)} nhân viên")
+    print(f"\n  Tong: {len(employees)} nhan vien")
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# CHỨC NĂNG 3: TÌM KIẾM NHÂN VIÊN
+# CHUC NANG 3: TIM KIEM NHAN VIEN
 # ─────────────────────────────────────────────────────────────────────────────
 
 def handle_search_employee(company):
     """
-    Xử lý tìm kiếm nhân viên (Menu 3).
+    Xu ly tim kiem nhan vien (Menu 3).
     
     Sub-menu:
         a. Theo ID
-        b. Theo tên
-        c. Theo ngôn ngữ lập trình (cho Developer)
+        b. Theo ten
+        c. Theo ngon ngu lap trinh (cho Developer)
     """
     if not company.has_employees():
-        Formatter.print_warning("Chưa có dữ liệu nhân viên trong hệ thống")
+        Formatter.print_warning("Chua co du lieu nhan vien trong he thong")
         return
     
-    Formatter.print_sub_header("TÌM KIẾM NHÂN VIÊN")
+    Formatter.print_sub_header("TIM KIEM NHAN VIEN")
     print("  a. Theo ID")
-    print("  b. Theo tên")
-    print("  c. Theo ngôn ngữ lập trình (cho Developer)")
-    print("  0. Quay lại")
+    print("  b. Theo ten")
+    print("  c. Theo ngon ngu lap trinh (cho Developer)")
+    print("  0. Quay lai")
     
-    choice = input("\n  Chọn cách tìm: ").strip().lower()
+    choice = input("\n  Chon cach tim: ").strip().lower()
     
     if choice == '0':
         return
     
     try:
         if choice == 'a':
-            # Tìm theo ID
-            emp_id = input("  Nhập mã nhân viên: ").strip().upper()
+            # Tim theo ID
+            emp_id = input("  Nhap ma nhan vien: ").strip().upper()
             employee = company.find_by_id(emp_id)
             
-            Formatter.print_header("KẾT QUẢ TÌM KIẾM")
+            Formatter.print_header("KET QUA TIM KIEM")
             print(Formatter.format_employee_info(employee))
             
         elif choice == 'b':
-            # Tìm theo tên
-            keyword = input("  Nhập tên hoặc từ khóa: ").strip()
+            # Tim theo ten
+            keyword = input("  Nhap ten hoac tu khoa: ").strip()
             if not keyword:
-                Formatter.print_error("Từ khóa không được để trống")
+                Formatter.print_error("Tu khoa khong duoc de trong")
                 return
             
             results = company.find_by_name(keyword)
             
             if not results:
-                Formatter.print_warning(f"Không tìm thấy nhân viên có tên chứa '{keyword}'")
+                Formatter.print_warning(f"Khong tim thay nhan vien co ten chua '{keyword}'")
                 return
             
-            Formatter.print_header(f"KẾT QUẢ TÌM KIẾM: '{keyword}'")
+            Formatter.print_header(f"KET QUA TIM KIEM: '{keyword}'")
             Formatter.print_employee_table_header()
             for i, emp in enumerate(results, 1):
                 print(Formatter.format_employee_row(i, emp))
-            print(f"\n  Tìm thấy: {len(results)} nhân viên")
+            print(f"\n  Tim thay: {len(results)} nhan vien")
             
         elif choice == 'c':
-            # Tìm Developer theo ngôn ngữ
-            language = input("  Nhập ngôn ngữ lập trình: ").strip()
+            # Tim Developer theo ngon ngu
+            language = input("  Nhap ngon ngu lap trinh: ").strip()
             if not language:
-                Formatter.print_error("Ngôn ngữ không được để trống")
+                Formatter.print_error("Ngon ngu khong duoc de trong")
                 return
             
             results = company.find_by_programming_language(language)
             
             if not results:
                 Formatter.print_warning(
-                    f"Không tìm thấy Developer dùng '{language}'"
+                    f"Khong tim thay Developer dung '{language}'"
                 )
                 return
             
-            Formatter.print_header(f"DEVELOPER SỬ DỤNG: {language.upper()}")
+            Formatter.print_header(f"DEVELOPER SU DUNG: {language.upper()}")
             Formatter.print_employee_table_header()
             for i, emp in enumerate(results, 1):
                 print(Formatter.format_employee_row(i, emp))
-            print(f"\n  Tìm thấy: {len(results)} Developer")
+            print(f"\n  Tim thay: {len(results)} Developer")
         else:
-            Formatter.print_error("Lựa chọn không hợp lệ")
+            Formatter.print_error("Lua chon khong hop le")
             
     except EmployeeNotFoundError as e:
         Formatter.print_error(str(e))
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# CHỨC NĂNG 4: QUẢN LÝ LƯƠNG
+# CHUC NANG 4: QUAN LY LUONG
 # ─────────────────────────────────────────────────────────────────────────────
 
 def handle_salary_management(company):
     """
-    Xử lý quản lý lương (Menu 4).
+    Xu ly quan ly luong (Menu 4).
     
     Sub-menu:
-        a. Tính lương cho từng nhân viên
-        b. Tính tổng lương công ty
-        c. Top 3 nhân viên lương cao nhất
+        a. Tinh luong cho tung nhan vien
+        b. Tinh tong luong cong ty
+        c. Top 3 nhan vien luong cao nhat
     """
     if not company.has_employees():
-        Formatter.print_warning("Chưa có dữ liệu nhân viên trong hệ thống")
+        Formatter.print_warning("Chua co du lieu nhan vien trong he thong")
         return
     
-    Formatter.print_sub_header("QUẢN LÝ LƯƠNG")
-    print("  a. Tính lương cho từng nhân viên")
-    print("  b. Tính tổng lương công ty")
-    print("  c. Top 3 nhân viên lương cao nhất")
-    print("  0. Quay lại")
+    Formatter.print_sub_header("QUAN LY LUONG")
+    print("  a. Tinh luong cho tung nhan vien")
+    print("  b. Tinh tong luong cong ty")
+    print("  c. Top 3 nhan vien luong cao nhat")
+    print("  0. Quay lai")
     
-    choice = input("\n  Chọn chức năng: ").strip().lower()
+    choice = input("\n  Chon chuc nang: ").strip().lower()
     
     if choice == '0':
         return
     
     try:
         if choice == 'a':
-            emp_id = input("  Nhập mã nhân viên: ").strip().upper()
+            emp_id = input("  Nhap ma nhan vien: ").strip().upper()
             employee = company.find_by_id(emp_id)
             calculate_employee_salary_detail(employee)
             
@@ -539,13 +515,13 @@ def handle_salary_management(company):
         elif choice == 'c':
             top_earners = company.get_top_earners(3)
             
-            Formatter.print_header("TOP 3 NHÂN VIÊN LƯƠNG CAO NHẤT")
+            Formatter.print_header("TOP 3 NHAN VIEN LUONG CAO NHAT")
             Formatter.print_employee_table_header()
             
-            # Dùng emoji medal cho top 3
-            medals = ["🥇", "🥈", "🥉"]
+            # Dung emoji medal cho top 3
+            medals = ["1st", "2nd", "3rd"]
             for i, emp in enumerate(top_earners):
-                medal = medals[i] if i < len(medals) else "  "
+                medal = medals[i] if i < len(medals) else "   "
                 salary_str = Formatter.format_currency(emp.calculate_salary())
                 print(
                     f" {medal} {i+1:<3} {emp.employee_id:<10} "
@@ -553,95 +529,95 @@ def handle_salary_management(company):
                     f"{salary_str:<20} {emp.performance_score}"
                 )
         else:
-            Formatter.print_error("Lựa chọn không hợp lệ")
+            Formatter.print_error("Lua chon khong hop le")
             
     except EmployeeNotFoundError as e:
         Formatter.print_error(str(e))
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# CHỨC NĂNG 5: QUẢN LÝ DỰ ÁN
+# CHUC NANG 5: QUAN LY DU AN
 # ─────────────────────────────────────────────────────────────────────────────
 
 def handle_project_management(company):
     """
-    Xử lý quản lý dự án (Menu 5).
+    Xu ly quan ly du an (Menu 5).
     
     Sub-menu:
-        a. Phân công nhân viên vào dự án
-        b. Xóa nhân viên khỏi dự án
-        c. Hiển thị dự án của 1 nhân viên
+        a. Phan cong nhan vien vao du an
+        b. Xoa nhan vien khoi du an
+        c. Hien thi du an cua 1 nhan vien
     """
     if not company.has_employees():
-        Formatter.print_warning("Chưa có dữ liệu nhân viên trong hệ thống")
+        Formatter.print_warning("Chua co du lieu nhan vien trong he thong")
         return
     
-    Formatter.print_sub_header("QUẢN LÝ DỰ ÁN")
-    print("  a. Phân công nhân viên vào dự án")
-    print("  b. Xóa nhân viên khỏi dự án")
-    print("  c. Hiển thị dự án của 1 nhân viên")
-    print("  0. Quay lại")
+    Formatter.print_sub_header("QUAN LY DU AN")
+    print("  a. Phan cong nhan vien vao du an")
+    print("  b. Xoa nhan vien khoi du an")
+    print("  c. Hien thi du an cua 1 nhan vien")
+    print("  0. Quay lai")
     
-    choice = input("\n  Chọn chức năng: ").strip().lower()
+    choice = input("\n  Chon chuc nang: ").strip().lower()
     
     if choice == '0':
         return
     
     try:
         if choice == 'a':
-            emp_id = input("  Nhập mã nhân viên: ").strip().upper()
-            project = input("  Nhập tên dự án: ").strip()
+            emp_id = input("  Nhap ma nhan vien: ").strip().upper()
+            project = input("  Nhap ten du an: ").strip()
             
             if not project:
-                Formatter.print_error("Tên dự án không được để trống")
+                Formatter.print_error("Ten du an khong duoc de trong")
                 return
             
             company.assign_project(emp_id, project)
             Formatter.print_success(
-                f"Đã phân công nhân viên {emp_id} vào dự án '{project}'"
+                f"Da phan cong nhan vien {emp_id} vao du an '{project}'"
             )
             
         elif choice == 'b':
-            emp_id = input("  Nhập mã nhân viên: ").strip().upper()
+            emp_id = input("  Nhap ma nhan vien: ").strip().upper()
             
-            # Hiển thị dự án hiện tại để user chọn
+            # Hien thi du an hien tai de user chon
             employee = company.find_by_id(emp_id)
             projects = employee.projects
             
             if not projects:
                 Formatter.print_warning(
-                    f"Nhân viên {emp_id} chưa tham gia dự án nào"
+                    f"Nhan vien {emp_id} chua tham gia du an nao"
                 )
                 return
             
-            print(f"\n  Dự án hiện tại của {employee.name}:")
+            print(f"\n  Du an hien tai cua {employee.name}:")
             for i, p in enumerate(projects, 1):
                 print(f"    {i}. {p}")
             
-            project = input("\n  Nhập tên dự án cần xóa: ").strip()
+            project = input("\n  Nhap ten du an can xoa: ").strip()
             company.unassign_project(emp_id, project)
             Formatter.print_success(
-                f"Đã xóa nhân viên {emp_id} khỏi dự án '{project}'"
+                f"Da xoa nhan vien {emp_id} khoi du an '{project}'"
             )
             
         elif choice == 'c':
-            emp_id = input("  Nhập mã nhân viên: ").strip().upper()
+            emp_id = input("  Nhap ma nhan vien: ").strip().upper()
             employee = company.find_by_id(emp_id)
             
             projects = employee.projects
             
             Formatter.print_sub_header(
-                f"DỰ ÁN CỦA {employee.name} [{emp_id}]"
+                f"DU AN CUA {employee.name} [{emp_id}]"
             )
             
             if not projects:
-                Formatter.print_warning("Chưa tham gia dự án nào")
+                Formatter.print_warning("Chua tham gia du an nao")
             else:
                 for i, p in enumerate(projects, 1):
                     print(f"    {i}. {p}")
-                print(f"\n  Tổng: {len(projects)}/5 dự án")
+                print(f"\n  Tong: {len(projects)}/5 du an")
         else:
-            Formatter.print_error("Lựa chọn không hợp lệ")
+            Formatter.print_error("Lua chon khong hop le")
             
     except EmployeeNotFoundError as e:
         Formatter.print_error(str(e))
@@ -650,81 +626,84 @@ def handle_project_management(company):
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# CHỨC NĂNG 6: ĐÁNH GIÁ HIỆU SUẤT
+# CHUC NANG 6: DANH GIA HIEU SUAT
 # ─────────────────────────────────────────────────────────────────────────────
 
 def handle_performance(company):
     """
-    Xử lý đánh giá hiệu suất (Menu 6).
+    Xu ly danh gia hieu suat (Menu 6).
     
     Sub-menu:
-        a. Cập nhật điểm hiệu suất cho nhân viên
-        b. Hiển thị nhân viên xuất sắc (điểm > 8)
-        c. Hiển thị nhân viên cần cải thiện (điểm < 5)
+        a. Cap nhat diem hieu suat cho nhan vien
+        b. Hien thi nhan vien xuat sac (diem > 8)
+        c. Hien thi nhan vien can cai thien (diem < 5)
     """
     if not company.has_employees():
-        Formatter.print_warning("Chưa có dữ liệu nhân viên trong hệ thống")
+        Formatter.print_warning("Chua co du lieu nhan vien trong he thong")
         return
     
-    Formatter.print_sub_header("ĐÁNH GIÁ HIỆU SUẤT")
-    print("  a. Cập nhật điểm hiệu suất cho nhân viên")
-    print("  b. Hiển thị nhân viên xuất sắc (điểm > 8)")
-    print("  c. Hiển thị nhân viên cần cải thiện (điểm < 5)")
-    print("  0. Quay lại")
+    Formatter.print_sub_header("DANH GIA HIEU SUAT")
+    print("  a. Cap nhat diem hieu suat cho nhan vien")
+    print("  b. Hien thi nhan vien xuat sac (diem > 8)")
+    print("  c. Hien thi nhan vien can cai thien (diem < 5)")
+    print("  0. Quay lai")
     
-    choice = input("\n  Chọn chức năng: ").strip().lower()
+    choice = input("\n  Chon chuc nang: ").strip().lower()
     
     if choice == '0':
         return
     
     try:
         if choice == 'a':
-            emp_id = input("  Nhập mã nhân viên: ").strip().upper()
+            emp_id = input("  Nhap ma nhan vien: ").strip().upper()
             employee = company.find_by_id(emp_id)
             
-            print(f"\n  Nhân viên: {employee.name}")
-            print(f"  Điểm hiệu suất hiện tại: {employee.performance_score}")
+            print(f"\n  Nhan vien: {employee.name}")
+            print(f"  Diem hieu suat hien tai: {employee.performance_score}")
             
-            score = input_with_retry(
-                "Điểm mới (0-10)", Validator.validate_score
-            )
-            if score is None:
+            # Nhap diem moi voi validation
+            try:
+                new_score = float(input("  Diem moi (0-10): ").strip())
+                if new_score < 0 or new_score > 10:
+                    raise ValueError("Diem phai nam trong khoang 0-10")
+            except ValueError as e:
+                Formatter.print_error(str(e))
                 return
             
-            employee.performance_score = score
+            employee.performance_score = new_score
             Formatter.print_success(
-                f"Đã cập nhật điểm hiệu suất của {employee.name}: {score}"
+                f"Da cap nhat diem hieu suat cua {employee.name}: {new_score}"
             )
             
         elif choice == 'b':
             excellent = company.get_excellent_employees(8.0)
             
             if not excellent:
-                Formatter.print_warning("Không có nhân viên xuất sắc (điểm > 8)")
+                Formatter.print_warning("Khong co nhan vien xuat sac (diem > 8)")
                 return
             
-            Formatter.print_header("NHÂN VIÊN XUẤT SẮC (ĐIỂM > 8)")
+            Formatter.print_header("NHAN VIEN XUAT SAC (DIEM > 8)")
             Formatter.print_employee_table_header()
             for i, emp in enumerate(excellent, 1):
                 print(Formatter.format_employee_row(i, emp))
-            print(f"\n  Tổng: {len(excellent)} nhân viên xuất sắc")
+            print(f"\n  Tong: {len(excellent)} nhan vien xuat sac")
             
         elif choice == 'c':
             underperforming = company.get_underperforming_employees(5.0)
             
             if not underperforming:
                 Formatter.print_info(
-                    "Tất cả nhân viên đều có hiệu suất tốt (≥ 5 điểm)! 🎉"
+                    "Tat ca nhan vien deu co hieu suat tot (>= 5 diem)!"
                 )
                 return
             
-            Formatter.print_header("NHÂN VIÊN CẦN CẢI THIỆN (ĐIỂM < 5)")
+            Formatter.print_header("NHAN VIEN CAN CAI THIEN (DIEM < 5)")
             Formatter.print_employee_table_header()
             for i, emp in enumerate(underperforming, 1):
                 print(Formatter.format_employee_row(i, emp))
-            print(f"\n  Tổng: {len(underperforming)} nhân viên cần cải thiện")
+            print(f"\n  Tong: {len(underperforming)} nhan vien can cai thien")
         else:
-            Formatter.print_error("Lựa chọn không hợp lệ")
+            Formatter.print_error("Lua chon khong hop le")
             
     except EmployeeNotFoundError as e:
         Formatter.print_error(str(e))
@@ -733,65 +712,65 @@ def handle_performance(company):
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# CHỨC NĂNG 7: QUẢN LÝ NHÂN SỰ
+# CHUC NANG 7: QUAN LY NHAN SU
 # ─────────────────────────────────────────────────────────────────────────────
 
 def handle_hr_management(company):
     """
-    Xử lý quản lý nhân sự (Menu 7).
+    Xu ly quan ly nhan su (Menu 7).
     
     Sub-menu:
-        a. Xóa nhân viên (nghỉ việc)
-        b. Tăng lương cơ bản cho nhân viên
-        c. Thăng chức (Intern → Developer, Developer → Manager)
+        a. Xoa nhan vien (nghi viec)
+        b. Tang luong co ban cho nhan vien
+        c. Thang chuc (Intern → Developer, Developer → Manager)
     """
     if not company.has_employees():
-        Formatter.print_warning("Chưa có dữ liệu nhân viên trong hệ thống")
+        Formatter.print_warning("Chua co du lieu nhan vien trong he thong")
         return
     
-    Formatter.print_sub_header("QUẢN LÝ NHÂN SỰ")
-    print("  a. Xóa nhân viên (nghỉ việc)")
-    print("  b. Tăng lương cơ bản cho nhân viên")
-    print("  c. Thăng chức (Intern → Developer, Developer → Manager)")
-    print("  0. Quay lại")
+    Formatter.print_sub_header("QUAN LY NHAN SU")
+    print("  a. Xoa nhan vien (nghi viec)")
+    print("  b. Tang luong co ban cho nhan vien")
+    print("  c. Thang chuc (Intern → Developer, Developer → Manager)")
+    print("  0. Quay lai")
     
-    choice = input("\n  Chọn chức năng: ").strip().lower()
+    choice = input("\n  Chon chuc nang: ").strip().lower()
     
     if choice == '0':
         return
     
     try:
         if choice == 'a':
-            # ── Xóa nhân viên ──────────────────────────────────────────
-            emp_id = input("  Nhập mã nhân viên cần xóa: ").strip().upper()
+            # ── Xoa nhan vien ──────────────────────────────────────────
+            emp_id = input("  Nhap ma nhan vien can xoa: ").strip().upper()
             employee = company.find_by_id(emp_id)
             
-            # Xác nhận trước khi xóa
-            print(f"\n  Bạn sắp xóa nhân viên:")
+            # Xac nhan truoc khi xoa
+            print(f"\n  Ban sap xoa nhan vien:")
             print(f"    {employee}")
-            confirm = input("  Xác nhận xóa? (y/n): ").strip().lower()
+            confirm = input("  Xac nhan xoa? (y/n): ").strip().lower()
             
             if confirm == 'y':
                 removed = company.remove_employee(emp_id)
                 Formatter.print_success(
-                    f"Đã xóa nhân viên: {removed.name} [{emp_id}]"
+                    f"Da xoa nhan vien: {removed.name} [{emp_id}]"
                 )
             else:
-                Formatter.print_info("Đã hủy thao tác xóa")
+                Formatter.print_info("Da huy thao tac xoa")
             
         elif choice == 'b':
-            # ── Tăng lương ─────────────────────────────────────────────
-            emp_id = input("  Nhập mã nhân viên: ").strip().upper()
+            # ── Tang luong ─────────────────────────────────────────────
+            emp_id = input("  Nhap ma nhan vien: ").strip().upper()
             employee = company.find_by_id(emp_id)
             
-            print(f"\n  Nhân viên: {employee.name}")
-            print(f"  Lương hiện tại: {Formatter.format_currency(employee.base_salary)}")
+            print(f"\n  Nhan vien: {employee.name}")
+            print(f"  Luong hien tai: {Formatter.format_currency(employee.base_salary)}")
             
-            pct_str = input("  Phần trăm tăng lương (%): ").strip()
+            pct_str = input("  Phan tram tang luong (%): ").strip()
             try:
                 percentage = float(pct_str)
                 if percentage <= 0:
-                    raise ValueError("Phần trăm phải > 0")
+                    raise ValueError("Phan tram phai > 0")
             except ValueError as e:
                 Formatter.print_error(str(e))
                 return
@@ -801,40 +780,40 @@ def handle_hr_management(company):
             new_salary = employee.base_salary
             
             Formatter.print_success(
-                f"Đã tăng lương {percentage}% cho {employee.name}"
+                f"Da tang luong {percentage}% cho {employee.name}"
             )
-            Formatter.print_field("Lương cũ", Formatter.format_currency(old_salary))
-            Formatter.print_field("Lương mới", Formatter.format_currency(new_salary))
+            Formatter.print_field("Luong cu", Formatter.format_currency(old_salary))
+            Formatter.print_field("Luong moi", Formatter.format_currency(new_salary))
             
         elif choice == 'c':
-            # ── Thăng chức ─────────────────────────────────────────────
-            emp_id = input("  Nhập mã nhân viên cần thăng chức: ").strip().upper()
+            # ── Thang chuc ─────────────────────────────────────────────
+            emp_id = input("  Nhap ma nhan vien can thang chuc: ").strip().upper()
             employee = company.find_by_id(emp_id)
             
             old_role = employee.get_role()
-            print(f"\n  Nhân viên: {employee.name}")
-            print(f"  Chức vụ hiện tại: {old_role}")
+            print(f"\n  Nhan vien: {employee.name}")
+            print(f"  Chuc vu hien tai: {old_role}")
             
             if old_role == "Manager":
-                Formatter.print_warning("Manager không thể thăng chức thêm")
+                Formatter.print_warning("Manager khong the thang chuc them")
                 return
             
             new_role = "Developer" if old_role == "Intern" else "Manager"
-            print(f"  Sẽ thăng chức lên: {new_role}")
+            print(f"  Se thang chuc len: {new_role}")
             
-            confirm = input("  Xác nhận thăng chức? (y/n): ").strip().lower()
+            confirm = input("  Xac nhan thang chuc? (y/n): ").strip().lower()
             
             if confirm == 'y':
                 new_employee = company.promote_employee(emp_id)
                 Formatter.print_success(
-                    f"Đã thăng chức {employee.name}: "
+                    f"Da thang chuc {employee.name}: "
                     f"{old_role} → {new_employee.get_role()} "
-                    f"[ID mới: {new_employee.employee_id}]"
+                    f"[ID moi: {new_employee.employee_id}]"
                 )
             else:
-                Formatter.print_info("Đã hủy thao tác thăng chức")
+                Formatter.print_info("Da huy thao tac thang chuc")
         else:
-            Formatter.print_error("Lựa chọn không hợp lệ")
+            Formatter.print_error("Lua chon khong hop le")
             
     except EmployeeNotFoundError as e:
         Formatter.print_error(str(e))
@@ -843,30 +822,30 @@ def handle_hr_management(company):
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# CHỨC NĂNG 8: THỐNG KÊ BÁO CÁO
+# CHUC NANG 8: THONG KE BAO CAO
 # ─────────────────────────────────────────────────────────────────────────────
 
 def handle_statistics(company):
     """
-    Xử lý thống kê báo cáo (Menu 8).
+    Xu ly thong ke bao cao (Menu 8).
     
     Sub-menu:
-        a. Số lượng nhân viên theo loại
-        b. Tổng lương theo phòng ban
-        c. Số dự án trung bình trên mỗi nhân viên
+        a. So luong nhan vien theo loai
+        b. Tong luong theo phong ban
+        c. So du an trung binh tren moi nhan vien
     """
     if not company.has_employees():
-        Formatter.print_warning("Chưa có dữ liệu nhân viên trong hệ thống")
+        Formatter.print_warning("Chua co du lieu nhan vien trong he thong")
         return
     
-    Formatter.print_sub_header("THỐNG KÊ BÁO CÁO")
-    print("  a. Số lượng nhân viên theo loại")
-    print("  b. Tổng lương theo phòng ban")
-    print("  c. Số dự án trung bình trên mỗi nhân viên")
-    print("  d. Báo cáo tổng hợp (tất cả)")
-    print("  0. Quay lại")
+    Formatter.print_sub_header("THONG KE BAO CAO")
+    print("  a. So luong nhan vien theo loai")
+    print("  b. Tong luong theo phong ban")
+    print("  c. So du an trung binh tren moi nhan vien")
+    print("  d. Bao cao tong hop (tat ca)")
+    print("  0. Quay lai")
     
-    choice = input("\n  Chọn chức năng: ").strip().lower()
+    choice = input("\n  Chon chuc nang: ").strip().lower()
     
     if choice == '0':
         return
@@ -875,16 +854,15 @@ def handle_statistics(company):
     
     if choice == 'a':
         counts = company.count_by_role()
-        Formatter.print_header("SỐ LƯỢNG NHÂN VIÊN THEO LOẠI")
+        Formatter.print_header("SO LUONG NHAN VIEN THEO LOAI")
         for role, count in counts.items():
-            bar = "█" * count  # Biểu đồ thanh đơn giản
-            Formatter.print_field(role, f"{count} người  {bar}")
+            Formatter.print_field(role, f"{count} nguoi")
         Formatter.print_separator()
-        Formatter.print_field("TỔNG CỘNG", f"{company.employee_count} người")
+        Formatter.print_field("TONG CONG", f"{company.employee_count} nguoi")
         
     elif choice == 'b':
         dept_salaries = company.total_salary_by_department()
-        Formatter.print_header("TỔNG LƯƠNG THEO PHÒNG BAN")
+        Formatter.print_header("TONG LUONG THEO PHONG BAN")
         
         total = 0
         for dept, salary in sorted(dept_salaries.items()):
@@ -892,36 +870,36 @@ def handle_statistics(company):
             total += salary
         
         Formatter.print_separator()
-        Formatter.print_field("TỔNG CỘNG", fmt(total))
+        Formatter.print_field("TONG CONG", fmt(total))
         
     elif choice == 'c':
         avg = company.average_projects_per_employee()
-        Formatter.print_header("THỐNG KÊ DỰ ÁN")
-        Formatter.print_field("Tổng nhân viên", company.employee_count)
+        Formatter.print_header("THONG KE DU AN")
+        Formatter.print_field("Tong nhan vien", company.employee_count)
         
         total_projects = sum(
             len(emp.projects) for emp in company.all_employees
         )
-        Formatter.print_field("Tổng dự án", total_projects)
-        Formatter.print_field("TB dự án/nhân viên", f"{avg:.2f}")
+        Formatter.print_field("Tong du an", total_projects)
+        Formatter.print_field("TB du an/nhan vien", f"{avg:.2f}")
         
     elif choice == 'd':
         print_salary_statistics(company)
     else:
-        Formatter.print_error("Lựa chọn không hợp lệ")
+        Formatter.print_error("Lua chon khong hop le")
 
 
 # =============================================================================
-# PHẦN 4: DỮ LIỆU MẪU (để test nhanh, không cần nhập tay)
+# PHAN 4: DU LIEU MAU (de test nhanh, khong can nhap tay)
 # =============================================================================
 
 def create_sample_data(company):
     """
-    Tạo dữ liệu mẫu để demo và test chương trình.
-    
-    Thêm 8 nhân viên mẫu với đầy đủ thông tin,
-    bao gồm: 2 Manager, 4 Developer, 2 Intern
-    
+    Tao du lieu mau de demo va test chuong trinh.
+
+    Them 8 nhan vien mau voi day du thong tin,
+    bao gom: 2 Manager, 4 Developer, 2 Intern
+
     Args:
         company: Object Company
     """
@@ -929,124 +907,124 @@ def create_sample_data(company):
         # ── Manager ─────────────────────────────────────────────────
         Manager(
             employee_id="MGR001",
-            name="Nguyễn Văn An",
+            name="Nguyen Van An",
             age=45,
             email="an.nguyen@company.com",
             phone="0901234567",
-            department="BAN GIÁM ĐỐC",
+            department="BAN GIAM DOC",
             base_salary=30_000_000,
             team_size=15,
             management_bonus=10_000_000
         ),
         Manager(
             employee_id="MGR002",
-            name="Trần Thị Bình",
+            name="Tran Thi Binh",
             age=40,
             email="binh.tran@company.com",
             phone="0912345678",
-            department="PHÒNG NHÂN SỰ",
+            department="PHONG NHAN SU",
             base_salary=25_000_000,
             team_size=8,
             management_bonus=7_000_000
         ),
-        
+
         # ── Developer ───────────────────────────────────────────────
         Developer(
             employee_id="DEV001",
-            name="Lê Minh Cường",
+            name="Le Minh Cuong",
             age=28,
             email="cuong.le@company.com",
             phone="0923456789",
-            department="PHÒNG KỸ THUẬT",
+            department="PHONG KY THUAT",
             base_salary=18_000_000,
             programming_language="Python",
             overtime_hours=20
         ),
         Developer(
             employee_id="DEV002",
-            name="Phạm Thị Dung",
+            name="Pham Thi Dung",
             age=26,
             email="dung.pham@company.com",
             phone="0934567890",
-            department="PHÒNG KỸ THUẬT",
+            department="PHONG KY THUAT",
             base_salary=16_000_000,
             programming_language="Java",
             overtime_hours=15
         ),
         Developer(
             employee_id="DEV003",
-            name="Hoàng Văn Em",
+            name="Hoang Van Em",
             age=30,
             email="em.hoang@company.com",
             phone="0945678901",
-            department="PHÒNG KỸ THUẬT",
+            department="PHONG KY THUAT",
             base_salary=20_000_000,
             programming_language="JavaScript",
             overtime_hours=10
         ),
         Developer(
             employee_id="DEV004",
-            name="Vũ Thị Phương",
+            name="Vu Thi Phuong",
             age=25,
             email="phuong.vu@company.com",
             phone="0956789012",
-            department="PHÒNG SẢN PHẨM",
+            department="PHONG SAN PHAM",
             base_salary=15_000_000,
             programming_language="Python",
             overtime_hours=25
         ),
-        
+
         # ── Intern ──────────────────────────────────────────────────
         Intern(
             employee_id="INT001",
-            name="Đỗ Quang Huy",
+            name="Do Quang Huy",
             age=21,
             email="huy.do@company.com",
             phone="0967890123",
-            department="PHÒNG KỸ THUẬT",
+            department="PHONG KY THUAT",
             base_salary=8_000_000,
-            university="ĐH Bách Khoa",
+            university="DH Bach Khoa",
             gpa=3.5,
             stipend_rate=0.6
         ),
         Intern(
             employee_id="INT002",
-            name="Ngô Thị Lan",
+            name="Ngo Thi Lan",
             age=22,
             email="lan.ngo@company.com",
             phone="0978901234",
-            department="PHÒNG NHÂN SỰ",
+            department="PHONG NHAN SU",
             base_salary=7_000_000,
-            university="ĐH Kinh Tế",
+            university="DH Kinh Te",
             gpa=3.8,
             stipend_rate=0.7
         ),
     ]
-    
-    # Thêm nhân viên vào công ty
+
+    # Them nhan vien vao cong ty
     for emp in sample_employees:
         company.add_employee(emp)
-    
-    # Gán dự án mẫu
+
+    # Gan du an mau
     project_assignments = {
-        "MGR001": ["Dự án Alpha", "Dự án Beta"],
-        "MGR002": ["Dự án HR System"],
-        "DEV001": ["Dự án Alpha", "Dự án API Gateway", "Dự án Microservice"],
-        "DEV002": ["Dự án Beta", "Dự án Payment"],
-        "DEV003": ["Dự án Alpha", "Dự án Frontend"],
-        "DEV004": ["Dự án API Gateway", "Dự án Dashboard"],
-        "INT001": ["Dự án Alpha"],
-        "INT002": ["Dự án HR System"],
+        "MGR001": ["Du an Alpha", "Du an Beta"],
+        "MGR002": ["Du an HR System"],
+        "DEV001": ["Du an Alpha", "Du an API Gateway", "Du an Microservice"],
+        "DEV002": ["Du an Beta", "Du an Payment"],
+        "DEV003": ["Du an Alpha", "Du an Frontend"],
+        "DEV004": ["Du an API Gateway", "Du an Dashboard"],
+        "INT001": ["Du an Alpha"],
+        "INT002": ["Du an HR System"],
     }
-    
+
     for emp_id, projects in project_assignments.items():
         for project in projects:
             try:
                 company.assign_project(emp_id, project)
             except (EmployeeNotFoundError, ProjectAllocationError):
-                pass  # Bỏ qua nếu có lỗi khi gán dự án mẫu
-    
-    # Gán điểm hiệu suất mẫu
+                pass  # Bo qua neu co loi khi gan du an mau
+
+    # Gan diem hieu suat mau
     performance_scores = {
         "MGR001": 9.0,
         "MGR002": 8.5,
@@ -1057,7 +1035,7 @@ def create_sample_data(company):
         "INT001": 7.0,
         "INT002": 4.5,
     }
-    
+
     for emp_id, score in performance_scores.items():
         try:
             employee = company.find_by_id(emp_id)
@@ -1066,47 +1044,24 @@ def create_sample_data(company):
             pass
 
     Formatter.print_success(
-        f"Đã tạo dữ liệu mẫu: {company.employee_count} nhân viên"
+        f"Da tao du lieu mau: {company.employee_count} nhan vien"
     )
 
 
 # =============================================================================
-# PHẦN 5: HÀM MAIN - ĐIỀU PHỐI CHÍNH
+# PHAN 5: HAM MAIN - DIEU PHOI CHINH
 # =============================================================================
 
-def main():
+def run_console(company):
     """
-    Hàm chính điều phối toàn bộ chương trình.
-    
-    LUỒNG HOẠT ĐỘNG:
-        1. Khởi tạo Company
-        2. Hỏi có muốn dùng dữ liệu mẫu không
-        3. Vòng lặp menu: Hiển thị menu → Nhận input → Xử lý → Lặp lại
-        4. Khi chọn 9 → Kết thúc
+    Ham chay che do console.
+
+    LUONG HOAT DONG:
+        1. Vong lap menu: Hien thi menu → Nhan input → Xu ly → Lap lai
+        2. Khi chon 9 → Ket thuc
     """
-    # ── Khởi tạo công ty ────────────────────────────────────────────────
-    company = Company("CÔNG TY ABC")
-    
-    # ── Banner chào mừng ────────────────────────────────────────────────
-    print("\n" + "═" * Formatter.LINE_WIDTH)
-    print("║" + " " * (Formatter.LINE_WIDTH - 2) + "║")
-    print("║" + "CHÀO MỪNG ĐẾN VỚI".center(Formatter.LINE_WIDTH - 2) + "║")
-    print("║" + "HỆ THỐNG QUẢN LÝ NHÂN VIÊN".center(Formatter.LINE_WIDTH - 2) + "║")
-    print("║" + f"— {company.name} —".center(Formatter.LINE_WIDTH - 2) + "║")
-    print("║" + " " * (Formatter.LINE_WIDTH - 2) + "║")
-    print("═" * Formatter.LINE_WIDTH)
-    
-    # ── Hỏi có muốn dùng dữ liệu mẫu không ────────────────────────────
-    use_sample = input(
-        "\n  Bạn có muốn tải dữ liệu mẫu để trải nghiệm? (y/n): "
-    ).strip().lower()
-    
-    if use_sample == 'y':
-        create_sample_data(company)
-    
-    # ── Vòng lặp menu chính ─────────────────────────────────────────────
-    # Mapping: số menu → hàm xử lý tương ứng
-    # Dùng dictionary thay vì if-elif dài → clean hơn, dễ mở rộng
+    # ── Vong lap menu chinh ─────────────────────────────────────────────
+    # Mapping: so menu → ham xu ly tuong ung
     menu_handlers = {
         '1': handle_add_employee,
         '2': handle_display_employees,
@@ -1117,52 +1072,86 @@ def main():
         '7': handle_hr_management,
         '8': handle_statistics,
     }
-    
+
     while True:
         try:
             print_main_menu()
-            choice = input("  Chọn chức năng (1-9): ").strip()
-            
+            choice = input("  Chon chuc nang (1-9): ").strip()
+
             if choice == '9':
-                # ── Thoát chương trình ──────────────────────────────────
-                Formatter.print_header("CẢM ƠN BẠN ĐÃ SỬ DỤNG HỆ THỐNG")
-                print("  Hẹn gặp lại! 👋")
-                print("═" * Formatter.LINE_WIDTH)
+                # ── Thoat chuong trinh ──────────────────────────────────
+                Formatter.print_header("CAM ON BAN DA SU DUNG HE THONG")
+                print("  Hen gap lai!")
+                print("=" * Formatter.LINE_WIDTH)
                 break
-            
+
             if choice in menu_handlers:
-                # Gọi hàm xử lý tương ứng, truyền company làm tham số
+                # Goi ham xu ly tuong ung, truyen company lam tham so
                 menu_handlers[choice](company)
             else:
                 Formatter.print_error(
-                    "Lựa chọn không hợp lệ. Vui lòng nhập từ 1 đến 9"
+                    "Lua chon khong hop le. Vui long nhap tu 1 den 9"
                 )
-                
+
         except KeyboardInterrupt:
-            # Ctrl+C → Thoát an toàn
+            # Ctrl+C → Thoat an toan
             print("\n")
-            Formatter.print_warning("Chương trình bị ngắt bởi người dùng")
+            Formatter.print_warning("Chuong trinh bi ngat boi nguoi dung")
             break
         except Exception as e:
-            # Bắt mọi lỗi không mong đợi → không crash chương trình
-            Formatter.print_error(f"Lỗi hệ thống: {e}")
-            print("  Chương trình tiếp tục chạy...")
-        
-        # Đợi Enter trước khi hiển thị lại menu
-        input("\n  Nhấn Enter để tiếp tục...")
+            # Bat moi loi khong mong doi → khong crash chuong trinh
+            Formatter.print_error(f"Loi he thong: {e}")
+            print("  Chuong trinh tiep tuc chay...")
+
+        # Doi Enter truoc khi hien thi lai menu
+        input("\n  Nhan Enter de tiep tuc...")
+
+
+def main():
+    """
+    Ham chinh cua chuong trinh.
+    
+    LUONG HOAT DONG:
+        1. Khoi tao Company object
+        2. Hoi co muon tai du lieu mau
+        3. Chay vong lap menu chinh
+        4. Khi chon "Thoat" → Ket thuc chuong trinh
+    """
+    # ── Khoi tao ─────────────────────────────────────────────────────────
+    company = Company("CONG TY ABC")
+    
+    # ── Banner khoi dong ────────────────────────────────────────────────
+    print("\n" + "=" * Formatter.LINE_WIDTH)
+    print("║" + " " * (Formatter.LINE_WIDTH - 2) + "║")
+    print("║" + "CHAO MUNG DEN VOI".center(Formatter.LINE_WIDTH - 2) + "║")
+    print("║" + "HE THONG QUAN LY NHAN VIEN".center(Formatter.LINE_WIDTH - 2) + "║")
+    print("║" + f"— {company.name} —".center(Formatter.LINE_WIDTH - 2) + "║")
+    print("║" + " " * (Formatter.LINE_WIDTH - 2) + "║")
+    print("=" * Formatter.LINE_WIDTH)
+    
+    # ── Hoi co muon du lieu mau ─────────────────────────────────────────
+    use_sample = input(
+        "\n  Ban co muon tai du lieu mau de trai nghiem? (y/n): "
+    ).strip().lower()
+    
+    if use_sample == 'y':
+        create_sample_data(company)
+    
+    # ── Chay chuong trinh chinh ──────────────────────────────────────────
+    run_console(company)
 
 
 # =============================================================================
-# PHẦN 6: ENTRY POINT - Điểm bắt đầu chương trình
+# PHAN 6: ENTRY POINT - Diem bat dau chuong trinh
 # =============================================================================
-# GIẢI THÍCH CHO NGƯỜI MỚI:
-# 
+# GIAI THICH CHO NGUOI MOI:
+#
 # if __name__ == "__main__":
-#   - Đoạn code bên trong CHỈ chạy khi file này được thực thi trực tiếp
-#     (nghĩa là: python main.py)
-#   - KHÔNG chạy khi file bị import từ file khác
-#     (nghĩa là: import main từ file khác sẽ KHÔNG chạy main())
-#   - Đây là best practice trong Python
+#   - Doan code ben trong CHI chay khi file nay duoc thuc thi truc tiep
+#     (nghia la: python main.py)
+#   - KHONG chay khi file bi import tu file khac
+#     (nghia la: import main tu file khac se KHONG goi main())
+#   - Day la best practice trong Python
 # =============================================================================
 
 if __name__ == "__main__":
