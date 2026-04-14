@@ -57,6 +57,7 @@ def print_main_menu():
      a. Tat ca nhan vien
      b. Theo loai (Manager/Developer/Intern)
      c. Theo hieu suat (tu cao den thap)
+     d. Theo so du an (nhieu nhat den it nhat)
 
   3. Tim kiem nhan vien
      a. Theo ID
@@ -334,6 +335,7 @@ def handle_display_employees(company):
         a. Tat ca nhan vien
         b. Theo loai (Manager/Developer/Intern)
         c. Theo hieu suat (tu cao den thap)
+        d. Theo so du an (nhieu nhat den it nhat)
     """
     if not company.has_employees():
         Formatter.print_warning("Chua co du lieu nhan vien trong he thong")
@@ -343,6 +345,7 @@ def handle_display_employees(company):
     print("  a. Tat ca nhan vien")
     print("  b. Theo loai (Manager/Developer/Intern)")
     print("  c. Theo hieu suat (tu cao den thap)")
+    print("  d. Theo so du an (nhieu nhat den it nhat)")
     print("  0. Quay lai")
     
     choice = input("\n  Chon chuc nang: ").strip().lower()
@@ -373,6 +376,10 @@ def handle_display_employees(company):
     elif choice == 'c':
         employees = company.sort_by_performance(descending=True)
         title = "NHAN VIEN THEO HIEU SUAT (CAO → THAP)"
+        
+    elif choice == 'd':
+        employees = company.sort_by_projects(descending=True)
+        title = "NHAN VIEN THEO SO DU AN (NHIEU → IT)"
     else:
         Formatter.print_error("Lua chon khong hop le")
         return

@@ -20,11 +20,11 @@ class Formatter:
         Formatter.print_header("TIÊU ĐỀ")   # → In tiêu đề có đường viền
     """
     
-    # ── Hằng số cho formatting ──────────────────────────────────────────
-    LINE_WIDTH = 65          # Chiều rộng dòng kẻ
-    BORDER_CHAR = "="        # Ký tự đường viền chính
-    SUB_BORDER_CHAR = "-"    # Ký tự đường viền phụ
-    LABEL_WIDTH = 22         # Chiều rộng nhãn (label)
+    # ── Hang so cho formatting ──────────────────────────────────────────
+    LINE_WIDTH = 90          # Chieu rong dong ke
+    BORDER_CHAR = "="        # Ky tu duong vien chinh
+    SUB_BORDER_CHAR = "-"    # Ky tu duong vien phu
+    LABEL_WIDTH = 22         # Chieu rong nhan (label)
     
     @staticmethod
     def format_currency(amount):
@@ -154,30 +154,36 @@ class Formatter:
     @staticmethod
     def format_employee_row(index, employee):
         """
-        Format 1 dòng tóm tắt nhân viên cho bảng danh sách.
-        
+        Format 1 dòng tom tat nhan vien cho bang danh sach.
+
         Args:
-            index (int): Số thứ tự
-            employee: Object nhân viên
-            
+            index (int): So thu tu
+            employee: Object nhan vien
+
         Returns:
-            str: Dòng thông tin tóm tắt
+            str: Dong thong tin tom tat
         """
         salary_str = Formatter.format_currency(employee.calculate_salary())
+        project_count = len(employee.projects)
         return (
             f"  {index:<4} {employee.employee_id:<10} "
             f"{employee.name:<25} {employee.get_role():<12} "
-            f"{salary_str:<20} {employee.performance_score}"
+            f"{salary_str:<20} {employee.performance_score:<5} {project_count}"
         )
-    
+
     @staticmethod
     def print_employee_table_header():
-        """In header cho bảng danh sách nhân viên."""
+        """In header cho bang danh sach nhan vien."""
         header = (
-            f"  {'STT':<4} {'MÃ NV':<10} {'HỌ TÊN':<25} "
-            f"{'CHỨC VỤ':<12} {'TỔNG LƯƠNG':<20} {'HIỆU SUẤT'}"
+            f"  {'STT':<4} {'MA NV':<10} {'HO TEN':<25} "
+            f"{'CHUC VU':<12} {'TONG LUONG':<20} {'HT':<5} {'DA'}"
         )
         print(header)
+        header2 = (
+            f"  {'':<4} {'':<10} {'':<25} "
+            f"{'':<12} {'':<20} {'':<5} {'SA'}"
+        )
+        print(header2)
         print(Formatter.SUB_BORDER_CHAR * Formatter.LINE_WIDTH)
     
     @staticmethod

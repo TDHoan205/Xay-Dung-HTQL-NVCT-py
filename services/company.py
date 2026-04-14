@@ -307,16 +307,32 @@ class Company:
     def get_top_earners(self, n=3):
         """
         Lấy top N nhân viên lương cao nhất.
-        
+
         Args:
             n (int): Số lượng (mặc định: 3)
-            
+
         Returns:
             list: Top N nhân viên lương cao nhất
         """
         sorted_list = self.sort_by_salary(descending=True)
         return sorted_list[:n]
-    
+
+    def sort_by_projects(self, descending=True):
+        """
+        Sắp xếp nhân viên theo số lượng dự án đang tham gia.
+
+        Args:
+            descending (bool): True = nhiều nhất trước, False = ít nhất trước
+
+        Returns:
+            list: Danh sách nhân viên đã sắp xếp theo số dự án
+        """
+        return sorted(
+            self._employees.values(),
+            key=lambda emp: len(emp.projects),
+            reverse=descending
+        )
+
     # ════════════════════════════════════════════════════════════════════
     # PERFORMANCE EVALUATION - Đánh giá hiệu suất
     # ════════════════════════════════════════════════════════════════════
